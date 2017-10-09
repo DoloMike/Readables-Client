@@ -4,10 +4,8 @@ import MenuItem from 'material-ui/MenuItem'
 import IconButton from 'material-ui/IconButton'
 import Divider from 'material-ui/Divider';
 import MenuIcon from 'material-ui/svg-icons/navigation/menu'
-import keyIndex from 'react-key-index'
 
-export default function CategoryMenu ({ categories }) {
-  categories = keyIndex(categories, 1);
+export default function CategoryMenu ( { categories } ) {
 
   return (
     <div>

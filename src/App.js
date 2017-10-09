@@ -7,15 +7,13 @@ import CategoryMenu from './Categories/CategoryMenu'
 import { getCategories } from './Categories/actions'
 
 import PostList from './Posts/PostList'
+import PostForm from './Posts/PostForm'
 import { getPosts, getComments } from './Posts/actions'
 
 import { fetchCatgories, fetchPosts, fetchComments } from './utils/api'
 import AppBar from 'material-ui/AppBar';
 
 class App extends Component {
-  state = {
-  }
-
   componentDidMount() {
     const { gotCategories, gotPosts, gotComments, } = this.props
 
@@ -26,7 +24,7 @@ class App extends Component {
       posts.forEach(post => {
         fetchComments(post.id)
         .then(comments => {
-          gotComments(posts, comments)
+          gotComments( comments )
         })
       })
     })
@@ -48,27 +46,28 @@ class App extends Component {
           iconElementLeft={<CategoryMenu categories={categories}/>}
         />
         <PostList posts={posts}></PostList>
+        <PostForm />
       </div>
-    );
+      );
+    }
   }
-}
 
-function mapStateToProps ({ posts, categories }) {
-  return {
-    posts,
-    categories
+  function mapStateToProps ({ posts, categories }) {
+    return {
+      posts,
+      categories
+    }
   }
-}
 
-function mapDispatchToProps (dispatch) {
-  return {
-    gotCategories: (categories) => dispatch(getCategories(categories)),
-    gotPosts: (posts) => dispatch(getPosts(posts)),
-    gotComments: (posts, comments) => dispatch(getComments(posts, comments))
+  function mapDispatchToProps (dispatch) {
+    return {
+      gotCategories: (categories) => dispatch(getCategories(categories)),
+      gotPosts: (posts) => dispatch(getPosts(posts)),
+      gotComments: (comments) => dispatch(getComments( comments ))
+    }
   }
-}
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(App)
+  export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(App)

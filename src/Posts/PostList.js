@@ -20,16 +20,14 @@ const styles = {
   },
   floatRight: {
     float: 'right'
+  },
+  voteButton: {
+    float: 'right',
+    top: -5
   }
 }
 
-export default function PostList ({ posts }) {
-  posts = posts.map(post => {
-    const commentNum = post.comments ? post.comments.length : 0
-    post.commentNumText = commentNum + ' comments'
-    return post
-  })
-
+export default function PostList ( { posts } ) {
   return (
     <div className="post-list">
       {posts.map((post) => (
@@ -41,13 +39,13 @@ export default function PostList ({ posts }) {
             </CardText>
             <CardActions>
               <RaisedButton label={post.commentNumText} primary={true} />
-                <IconButton style={styles.floatRight}>
-                  <ArrowUp />
-                </IconButton>
-                <RaisedButton style={styles.floatRight} label={'Votes ' + post.voteScore} disabled={true}/>
-                <IconButton style={styles.floatRight}>
-                  <ArrowDown />
-                </IconButton>
+              <IconButton style={styles.voteButton}>
+                <ArrowUp />
+              </IconButton>
+              <RaisedButton style={styles.floatRight} label={'Votes ' + post.voteScore} disabled={true}/>
+              <IconButton style={styles.voteButton}>
+                <ArrowDown />
+              </IconButton>
             </CardActions>
           </Card>
         </div>

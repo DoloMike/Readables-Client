@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import registerServiceWorker from './registerServiceWorker';
 import { Provider } from 'react-redux';
 import { createStore, compose } from 'redux'
@@ -16,7 +18,7 @@ const store = createStore(
 
 ReactDOM.render(
   <Provider store={store}>
-    <MuiThemeProvider>
+    <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
       <App />
     </MuiThemeProvider>
   </Provider>,
