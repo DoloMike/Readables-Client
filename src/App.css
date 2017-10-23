@@ -13,3 +13,7 @@
 html {
   background-color: black
 }
+
+ #appBar:hover {
+  cursor:pointer;
+ }

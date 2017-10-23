@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
+import { push } from 'react-router-redux'
 import { Route } from 'react-router'
 import './App.css';
 
@@ -35,6 +36,10 @@ class App extends Component {
     })
   }
 
+  handleHomeClick = () => {
+    this.props.navToHome()
+  }
+
   render() {
     const {categories, posts} = this.props
 
@@ -43,6 +48,8 @@ class App extends Component {
         <AppBar
           title="Readables"
           iconElementLeft={<div></div>}
+          onClick={() => this.handleHomeClick()}
+          id="appBar"
         />
 
         <Route exact path="/" render={() => (
@@ -73,7 +80,8 @@ function mapDispatchToProps (dispatch) {
   return {
     gotCategories: (categories) => dispatch(getCategories(categories)),
     gotPosts: (posts) => dispatch(getPosts(posts)),
-    gotComments: (comments) => dispatch(getComments( comments ))
+    gotComments: (comments) => dispatch(getComments( comments )),
+    navToHome: () =>  dispatch(push('/'))
   }
 }
 

@@ -55,3 +55,15 @@ export function postVote(vote, postId) {
   return fetch(url, opts)
   .then(res => res.json())
 }
+
+export function postComment(comment) {
+  const url = `${API_ROOT}/comments`
+  const opts = {
+    headers: POST_JSON_HEADERS,
+    method: 'post',
+    body: JSON.stringify(comment)
+  }
+
+  return fetch(url, opts)
+  .then(res => res.json())
+}
