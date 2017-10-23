@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-//import logo from './logo.svg';
+import { Route } from 'react-router'
 import './App.css';
 
-import CategoryMenu from './Categories/CategoryMenu'
 import { getCategories } from './Categories/actions'
-
+import FeedContol from './Posts/FeedControl'
 import PostList from './Posts/PostList'
 import PostForm from './Posts/PostForm'
+import PostDetail from './Posts/PostDetail'
 import { getPosts, getComments } from './Posts/actions'
 
 import { fetchCatgories, fetchPosts, fetchComments } from './utils/api'
@@ -36,38 +36,48 @@ class App extends Component {
   }
 
   render() {
-    const categories = this.props.categories
-    const posts = this.props.posts
+    const {categories, posts} = this.props
 
     return (
       <div className="App">
         <AppBar
           title="Readables"
-          iconElementLeft={<CategoryMenu categories={categories}/>}
+          iconElementLeft={<div></div>}
         />
-        <PostList posts={posts}></PostList>
-        <PostForm />
+
+        <Route exact path="/" render={() => (
+          <div>
+            <FeedContol categories={categories}></FeedContol>
+            <PostList posts={posts}></PostList>
+            <PostForm />
+          </div>
+        )}/>
+
+        <Route path='/post/:id' render={() => (
+          <PostDetail posts={posts}></PostDetail>
+        )}/>
       </div>
-      );
-    }
+    )
   }
+}
 
-  function mapStateToProps ({ posts, categories }) {
-    return {
-      posts,
-      categories
-    }
+function mapStateToProps ({ posts, categories, router }) {
+  return {
+    posts,
+    categories,
+    router
   }
+}
 
-  function mapDispatchToProps (dispatch) {
-    return {
-      gotCategories: (categories) => dispatch(getCategories(categories)),
-      gotPosts: (posts) => dispatch(getPosts(posts)),
-      gotComments: (comments) => dispatch(getComments( comments ))
-    }
+function mapDispatchToProps (dispatch) {
+  return {
+    gotCategories: (categories) => dispatch(getCategories(categories)),
+    gotPosts: (posts) => dispatch(getPosts(posts)),
+    gotComments: (comments) => dispatch(getComments( comments ))
   }
+}
 
-  export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(App)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App)

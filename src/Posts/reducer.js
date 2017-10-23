@@ -1,48 +1,50 @@
-import { GET_POSTS, GET_COMMENTS, ADD_POST } from './actions'
+import { GET_POSTS, GET_COMMENTS, ADD_POST, SORT_POSTS, VOTE_POST } from './actions'
 
 function posts (state = [], action) {
-  let posts = []
-
   switch(action.type) {
     case GET_POSTS :
-      posts = action.posts
-      posts = posts.map(post => {
-        const commentNum = post.comments ? post.comments.length : 0
-        post.commentNumText = commentNum + ' comments'
-        return post
-      })
-      return posts
+      // default to most upvoted first
+      return action.posts.sort((a, b) => a.voteScore < b.voteScore)
+
     case GET_COMMENTS :
       const { comments } = action
-      posts = [...state]
+      const commentsParentId = comments.length ? comments[0].parentId : ''
+      let posts = [...state]
 
-      posts = posts.map(post => {
-        const postComments = comments.filter(
-          comment => comment.parentId === post.id
-        )
-
-        if(postComments.length > 0) {
-          post.comments = postComments
+      return posts.map(post => {
+        // add comments and comments.length as props
+        if(post.id === commentsParentId) {
+          post.comments = comments
+          post.commentNum = post.comments.length
         }
 
         return post
       })
 
-      posts = posts.map(post => {
-        const commentNum = post.comments ? post.comments.length : 0
-        post.commentNumText = commentNum + ' comments'
-        return post
-      })
-
-      return posts
     case ADD_POST :
-      posts = [...state, action.newPost]
-      posts = posts.map(post => {
-        const commentNum = post.comments ? post.comments.length : 0
-        post.commentNumText = commentNum + ' comments'
+      return [...state, action.newPost]
+
+    case SORT_POSTS :
+      const { sortByValue } = action
+      posts = [...state]
+
+      if (sortByValue==='Votes') {
+        posts = posts.sort((a, b) => a.voteScore < b.voteScore)
+      } else if (sortByValue==='Most Recent') {
+        posts = posts.sort((a, b) => a.timestamp < b.timestamp)
+      }
+      return posts
+
+    case VOTE_POST :
+      const { voteScore, postId } = action
+      posts = [...state]
+
+      return posts.map(post => {
+        if(post.id === postId) {
+          post.voteScore = voteScore
+        }
         return post
       })
-      return posts
     default :
       return state;
   }

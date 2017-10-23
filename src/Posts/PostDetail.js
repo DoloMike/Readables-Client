@@ -53,44 +53,51 @@ class PostList extends Component {
 
   render() {
     const posts = this.props.posts
+    const pathArr = this.props.router.location.pathname.split('/')
+    const postId = pathArr[pathArr.length-1]
+
+    let currentPost = posts.filter(post => post.id === postId)
+    if(currentPost.length===1) {
+      currentPost = currentPost[0]
+    }
 
     return (
       <div className="post-list">
-        {posts.map((post) => (
-          <div key={post.id}>
-            <Card style={styles.cardMargin}>
-              <CardTitle title={post.title} subtitle={post.category}/>
-              <CardText>
-                {post.body}
-                <br></br>
-                <br></br>
-                {/* {new Date(post.timestamp).toLocaleString("en-US")} */}
-              </CardText>
-              <CardActions>
-                <RaisedButton label={`${post.commentNum ? post.commentNum : 0} Comments`}
-                  primary={true}
-                  onClick={() => this.goToPostDetail(post.id)}
-                />
-                <IconButton style={styles.voteButton} onClick={() => this.apiPostVote('upVote', post.id)}>
-                  <ArrowUp />
-                </IconButton>
-                <RaisedButton style={styles.floatRight} label={'Votes ' + post.voteScore} disabled={true}/>
-                <IconButton style={styles.voteButton} onClick={() => this.apiPostVote('downVote', post.id)}>
-                  <ArrowDown />
-                </IconButton>
-              </CardActions>
-            </Card>
-          </div>
-        ))}
-        <div style={styles.footerGap}></div>
-      </div>
-    )
-  }
+        <div key={currentPost.id}>
+          <Card style={styles.cardMargin}>
+            <CardTitle title={currentPost.title} subtitle={currentPost.category}/>
+            <CardText>
+              {currentPost.body}
+              <br></br>
+              <br></br>
+              {new Date(currentPost.timestamp).toLocaleString("en-US")}
+            </CardText>
+            <CardActions>
+              <RaisedButton label={`${currentPost.commentNum ? currentPost.commentNum : 0} Comments`}
+                primary={true}
+                onClick={() => this.goToPostDetail(currentPost.id)}
+              />
+              <IconButton style={styles.voteButton} onClick={() => this.apiPostVote('upVote', currentPost.id)}>
+                <ArrowUp />
+              </IconButton>
+              <RaisedButton style={styles.floatRight} label={'Votes ' + currentPost.voteScore} disabled={true}/>
+              <IconButton style={styles.voteButton} onClick={() => this.apiPostVote('downVote', currentPost.id)}>
+                <ArrowDown />
+              </IconButton>
+            </CardActions>
+          </Card>
+        </div>
+      ))}
+      <div style={styles.footerGap}></div>
+    </div>
+  )
+}
 }
 
-function mapStateToProps ({ posts, }) {
+function mapStateToProps ({ posts, router }) {
   return {
     posts,
+    router
   }
 }
 

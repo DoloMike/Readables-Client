@@ -32,13 +32,24 @@ export function fetchComments(postId) {
   .then(res => res.json())
 }
 
-//POST /posts
 export function postPost(post) {
   const url = `${API_ROOT}/posts`
   const opts = {
     headers: POST_JSON_HEADERS,
     method: 'post',
     body: JSON.stringify(post)
+  }
+
+  return fetch(url, opts)
+  .then(res => res.json())
+}
+
+export function postVote(vote, postId) {
+  const url = `${API_ROOT}/posts/${postId}`
+  const opts = {
+    headers: POST_JSON_HEADERS,
+    method: 'post',
+    body: JSON.stringify(vote)
   }
 
   return fetch(url, opts)
