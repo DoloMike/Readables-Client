@@ -7,8 +7,9 @@ import IconButton from 'material-ui/IconButton';
 import ArrowDown from 'material-ui/svg-icons/navigation/arrow-downward';
 import ArrowUp from 'material-ui/svg-icons/navigation/arrow-upward';
 
-import { votePost } from '../Posts/actions'
-import { postVote } from '../utils/api'
+import { getComments } from '../Posts/actions'
+
+import { postCommentVote, fetchComments } from '../utils/api'
 
 const styles = {
   smallIcon: {
@@ -38,13 +39,16 @@ const styles = {
 }
 
 class Comments extends Component {
-  apiPostVote = ( vote, postId ) => {
-    const { votedPost } = this.props
+  apiPostVote = ( vote, commentId ) => {
+    const { gotComments } = this.props
     vote = {option: vote}
 
-    postVote(vote, postId)
-    .then(post => {
-      votedPost(post.voteScore, post.id)
+    postCommentVote(vote, commentId)
+    .then(comment => {
+      fetchComments(comment.parentId)
+      .then(comments => {
+        gotComments( comments )
+      })
     })
   }
 
@@ -93,7 +97,7 @@ function mapStateToProps ({ posts, router }) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    votedPost: (voteScore, postId) => dispatch(votePost(voteScore, postId)),
+    gotComments: (comments) => dispatch(getComments( comments )),
   }
 }
 

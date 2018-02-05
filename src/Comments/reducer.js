@@ -1,14 +1,10 @@
-import { ADD_COMMENT } from './actions'
+import { ADD_COMMENT, VOTE_COMMENT } from './actions'
 
 function posts (state = [], action) {
   switch(action.type) {
     case ADD_COMMENT :
-      const { posts } = [...state]
-      const { comment } = action
 
-      console.log(comment, posts)
-
-      return state;
+    case ADD_COMMENT :
 
     default :
       return state;
